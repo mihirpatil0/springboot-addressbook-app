@@ -1,5 +1,8 @@
 package com.bridgelabz.addressbookapp.controllers;
 
+import com.bridgelabz.addressbookapp.dto.AddressBookDTO;
+import com.bridgelabz.addressbookapp.dto.ResponseDTO;
+import com.bridgelabz.addressbookapp.model.AddressBookData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +17,13 @@ public class AddressBookController {
      * @return All Persons records.
      */
     @GetMapping("/persons")
-    public ResponseEntity<String> getPersonsAddress()
+    public ResponseEntity<ResponseDTO> getPersonsAddress()
     {
-        return new ResponseEntity<String>("Get Call Success: ", HttpStatus.OK);
+        AddressBookDTO addressBookDTO = new AddressBookDTO("Mihir Patil", "Shriwardhan",
+                                    "Shriwardhan", "Maharashtra",402110,"9987884804");
+        AddressBookData addressBookData = new AddressBookData(1,addressBookDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Gel Call Success :",addressBookData);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 
     /**
@@ -26,9 +33,13 @@ public class AddressBookController {
      * @return Person details.
      */
     @GetMapping("/person/{personId}")
-    public ResponseEntity<String> getPersonsAddress(@PathVariable("personId") int personId)
+    public ResponseEntity<ResponseDTO> getPersonsAddress(@PathVariable("personId") int personId)
     {
-        return new ResponseEntity<String>("Get Call Success: " + personId,HttpStatus.OK);
+        AddressBookDTO addressBookDTO = new AddressBookDTO("Mihir Patil", "Shriwardhan",
+                "Shriwardhan", "Maharashtra",402110,"9987884804");
+        AddressBookData addressBookData = new AddressBookData(personId,addressBookDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Gel Call Success :",addressBookData);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 
     /**
@@ -37,9 +48,11 @@ public class AddressBookController {
      * @return If successfully created then returns same persons details with message.
      */
     @PostMapping("/create")
-    public ResponseEntity<String> addPersonsAddress()
+    public ResponseEntity<ResponseDTO> addPersonsAddress(@RequestBody AddressBookDTO addressBookDTO)
     {
-        return new ResponseEntity<String>("Created Person : ",HttpStatus.OK);
+        AddressBookData addressBookData = new AddressBookData(2,addressBookDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Created Person Data Successfully :",addressBookData);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 
     /**
@@ -47,10 +60,13 @@ public class AddressBookController {
      *
      * @return Appropriate message which updated persons details.
      */
-    @PutMapping("/update")
-    public ResponseEntity<String> updatePersonsAddress()
+    @PutMapping("/update/{personId}")
+    public ResponseEntity<ResponseDTO> updatePersonsAddress(@PathVariable("personId") int personId,
+                                                       @RequestBody AddressBookDTO addressBookDTO)
     {
-        return new ResponseEntity<String>("Updated Persons Details :",HttpStatus.OK);
+        AddressBookData addressBookData = new AddressBookData(personId,addressBookDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Persons Data Updated Successfully :",addressBookData);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 
     /**
@@ -60,8 +76,9 @@ public class AddressBookController {
      * @return appropriate message.
      */
     @DeleteMapping("/delete/{personId}")
-    public ResponseEntity<String> deletePersonsAddress(@PathVariable("personId") int personId)
+    public ResponseEntity<ResponseDTO> deletePersonsAddress(@PathVariable("personId") int personId)
     {
-        return new ResponseEntity<String>("Delete Call Success For Id : " + personId,HttpStatus.OK);
+        ResponseDTO responseDTO = new ResponseDTO("Data Deleted Successfully", "Deleted Id : "+ personId);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 }
