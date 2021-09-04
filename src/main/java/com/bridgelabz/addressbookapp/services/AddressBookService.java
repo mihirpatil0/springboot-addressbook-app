@@ -10,6 +10,8 @@ import java.util.List;
 @Service
 public class AddressBookService implements IAddressBookService{
 
+    private List<AddressBookData> addressBookDataList = new ArrayList<>();
+
     /**
      * This method gives back all the records present in database.
      *
@@ -17,9 +19,6 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public List<AddressBookData> getPersonsAddressData() {
-        List<AddressBookData> addressBookDataList = new ArrayList<>();
-        addressBookDataList.add(new AddressBookData(1,new AddressBookDTO("Mihir Patil",
-                "Shriwardhan", "Shriwardhan", "Maharashtra",402110,"9987884804")));
         return addressBookDataList;
     }
 
@@ -31,9 +30,7 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public AddressBookData getPersonsAddressDataById(int personId) {
-        AddressBookData addressBookData = new AddressBookData(personId, new AddressBookDTO("Mihir Patil",
-                "Shriwardhan", "Shriwardhan", "Maharashtra",402110,"9987884804"));
-        return  addressBookData;
+        return addressBookDataList.get(personId-1);
     }
 
     /**
@@ -44,7 +41,8 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public AddressBookData createPersonsAddressData(AddressBookDTO addressBookDTO) {
-        AddressBookData addressBookData = new AddressBookData(40,addressBookDTO);
+        AddressBookData addressBookData = new AddressBookData(addressBookDataList.size()+1,addressBookDTO);
+        addressBookDataList.add(addressBookData);
         return addressBookData;
     }
 
@@ -57,7 +55,14 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public AddressBookData updatePersonsAddressData(int personId, AddressBookDTO addressBookDTO) {
-        AddressBookData addressBookData = new AddressBookData(personId,addressBookDTO);
+        AddressBookData addressBookData = this.getPersonsAddressDataById(personId);
+        addressBookData.setFullName(addressBookDTO.fullName);
+        addressBookData.setAddress(addressBookDTO.address);
+        addressBookData.setCity(addressBookDTO.city);
+        addressBookData.setState(addressBookDTO.state);
+        addressBookData.setZipcode(addressBookDTO.zipcode);
+        addressBookData.setPhoneNumber(addressBookDTO.phoneNumber);
+        addressBookDataList.set(personId-1,addressBookData);
         return addressBookData;
     }
 
@@ -68,6 +73,6 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public void deletePersonsAddressData(int personId) {
-
+        addressBookDataList.remove(personId-1);
     }
 }
