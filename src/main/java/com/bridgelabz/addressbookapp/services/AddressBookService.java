@@ -6,8 +6,6 @@ import com.bridgelabz.addressbookapp.model.AddressBookData;
 import com.bridgelabz.addressbookapp.repository.AddressBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,8 +14,6 @@ public class AddressBookService implements IAddressBookService{
     @Autowired
     private AddressBookRepository addressBookRepository;
 
-    private List<AddressBookData> addressBookDataList = new ArrayList<>();
-
     /**
      * This method gives back all the records present in database.
      *
@@ -25,7 +21,7 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public List<AddressBookData> getPersonsAddressData() {
-        return addressBookDataList;
+        return addressBookRepository.findAll();
     }
 
     /**
@@ -36,10 +32,9 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public AddressBookData getPersonsAddressDataById(int personId) {
-        return addressBookDataList.stream()
-                .filter(addressBookData -> addressBookData.getPersonId() == personId)
-                .findFirst()
-                .orElseThrow(() -> new AddressBookException("Requested Persons Data For An Given Id Is Not Found."));
+        return addressBookRepository
+                .findById(personId)
+                .orElseThrow(() -> new AddressBookException("Requested Persons Data For An Given Id " + personId + " Does not exist."));
     }
 
     /**
@@ -51,7 +46,6 @@ public class AddressBookService implements IAddressBookService{
     @Override
     public AddressBookData createPersonsAddressData(AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = new AddressBookData(addressBookDTO);
-        addressBookDataList.add(addressBookData);
         return addressBookRepository.save(addressBookData);
     }
 
@@ -65,14 +59,8 @@ public class AddressBookService implements IAddressBookService{
     @Override
     public AddressBookData updatePersonsAddressData(int personId, AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = this.getPersonsAddressDataById(personId);
-        addressBookData.setFullName(addressBookDTO.fullName);
-        addressBookData.setAddress(addressBookDTO.address);
-        addressBookData.setCity(addressBookDTO.city);
-        addressBookData.setState(addressBookDTO.state);
-        addressBookData.setZipcode(addressBookDTO.zipcode);
-        addressBookData.setPhoneNumber(addressBookDTO.phoneNumber);
-        addressBookDataList.set(personId-1,addressBookData);
-        return addressBookData;
+        addressBookData.updateAddressBookData(addressBookDTO);
+        return addressBookRepository.save(addressBookData);
     }
 
     /**
@@ -82,6 +70,7 @@ public class AddressBookService implements IAddressBookService{
      */
     @Override
     public void deletePersonsAddressData(int personId) {
-        addressBookDataList.remove(personId-1);
+        AddressBookData addressBookData = this.getPersonsAddressDataById(personId);
+        addressBookRepository.delete(addressBookData);
     }
 }
