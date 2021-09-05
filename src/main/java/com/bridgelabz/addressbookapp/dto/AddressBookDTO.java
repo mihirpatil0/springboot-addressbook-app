@@ -1,9 +1,12 @@
 package com.bridgelabz.addressbookapp.dto;
 
+import lombok.ToString;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+@ToString
 public class AddressBookDTO {
 
     @NotEmpty(message = "Persons full-name cannot be null.")
@@ -33,17 +36,5 @@ public class AddressBookDTO {
         this.state = state;
         this.zipcode = zipcode;
         this.phoneNumber = phoneNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "AddressBookDTO{" +
-                "fullName='" + fullName + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zipcode=" + zipcode +
-                ", phoneNumber=" + phoneNumber +
-                '}';
     }
 }
