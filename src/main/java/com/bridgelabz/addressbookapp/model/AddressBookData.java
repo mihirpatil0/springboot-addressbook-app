@@ -9,7 +9,7 @@ public class AddressBookData {
     private String address;
     private String city;
     private String state;
-    private long zipcode;
+    private String zipcode;
     private String phoneNumber;
 
     public AddressBookData(int personId, AddressBookDTO addressBookDTO){
@@ -62,11 +62,11 @@ public class AddressBookData {
         this.state = state;
     }
 
-    public long getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(long zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 
